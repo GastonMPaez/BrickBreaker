@@ -48,6 +48,11 @@ let blockY = 45;
 let score = 0;
 let gameOver = false;
 
+const bounceSound = new Audio("sfx/bounce_sound.mp3")
+const pointSound = new Audio("sfx/point_sound.mp3");
+const NewLayerSound = new Audio("sfx/next_layer.mp3");
+const gameOverSound = new Audio("sfx/game_over.mp3");
+
 
 window.onload = function(){
     board = document.getElementById("board");
@@ -87,24 +92,29 @@ function update(){
     if(ball.y <= 0) {
         //ball touches top of canvas
         ball.velocityY *= -1;
+        bounceSound.play();
     }
     else if (ball.x <= 0 || (ball.x + ball.width) >= boardWidth) {
         //ball touches left or right of canvas
         ball.velocityX *= -1;
+        bounceSound.play();
     }
     else if (ball.y + ball.height >= boardHeight) {
         //ball touch botom (game over)
         context.font = "20px sans-serif"
         context.fillText("GAME OVER: press 'SPACE' to restart", 80, 400);
         gameOver = true;
+        gameOverSound.play();
     }
 
     //ball bounce of player
     if (topCollision(ball, player) || bottomCollision(ball, player)) {
         ball.velocityY *= -1;
+        bounceSound.play();
     }
     else if (leftCollision(ball, player) || rigthCollision(ball, player)) {
         ball.velocityX *= -1;
+        bounceSound.play();
     }
 
     //blocks
@@ -117,12 +127,14 @@ function update(){
                 ball.velocityY *= -1;
                 blockCount -= 1;
                 score += 100;
+                pointSound.play();
             }
             else if ( leftCollision(ball, block) || rigthCollision(ball, block) ) {
                 block.break = true;
                 ball.velocityX *= -1;
                 blockCount -= 1;
                 score += 100;
+                pointSound.play();
             }
             context.fillRect(block.x, block.y, block.width, block.height);
         }
@@ -133,6 +145,7 @@ function update(){
         score += 100 * blockRows * blockColumns; // bonus points
         blockRows = Math.min(blockRows + 1, blockMaxRows);
         createBlocks();
+        NewLayerSound.play();
     }
 
     //score
