@@ -53,7 +53,6 @@ const pointSound = new Audio("sfx/point_sound.mp3");
 const NewLayerSound = new Audio("sfx/next_layer.mp3");
 const gameOverSound = new Audio("sfx/game_over.mp3");
 
-
 window.onload = function(){
     board = document.getElementById("board");
     board.height = boardHeight;
